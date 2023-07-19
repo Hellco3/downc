@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<clientconfig>
+    <Log>
+        <!-- client log path -->
+        <LogPath>../log</LogPath>
+        <!-- client log level ERROR=300,WARN=400,INFO=600,DEBUG=700 -->
+        <LogLevel>400</LogLevel>
+    </Log>
+</clientconfig>
