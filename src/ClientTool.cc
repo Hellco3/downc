@@ -167,6 +167,7 @@ void Client_Tool::removeFileFd(const std::string & filename)
     {
         delete iter->second.mtx;
         delete iter->second.processbar;
+        close(iter->second.filefd);
         _file_map.erase(iter);
     }
 }
@@ -218,7 +219,7 @@ void Client_Tool::mhelp(const char *project_name)
 {
     printf("-------------------------------------\n");
     printf("please in put param for example: \n");
-    printf(" %s test                            $poolName object_id \n", project_name);
+    printf("demo: ./%s https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ls-lR.gz", project_name);
     printf("--------------------------------------\n");
 }
 
@@ -231,6 +232,11 @@ void Client_Tool::DownloadTask(std::string & uri, size_t offset, size_t size, si
 
     FileOp fileop;
     int file_fd = getFileFd(filepath, &fileop);
+    if(-1 == file_fd)
+    {
+        logError("getFileFd failed. uri:%s", uri.c_str());
+        return;
+    }
     char * getbuf = _BufList[handlerid];
     bzero(getbuf, BUF_SIZE);
     std::shared_ptr<DownloadHandler>pHandler = _dhandlerlist[handlerid];
