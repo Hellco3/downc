@@ -25,8 +25,8 @@ class Conn{
 public:
     Conn()=default;
     ~Conn()=default;
-    virtual size_t getSizeForUrl(const std::string & uri){}
-    virtual int getFinalUrl(std::string &uri){}
+    virtual size_t getSizeForUrl(const std::string & uri){return 0;}
+    virtual int getFinalUrl(std::string &uri){return 0;}
     virtual void Init()=0;
     virtual int Execute(void *)=0;
 };

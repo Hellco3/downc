@@ -29,9 +29,13 @@ size_t HttpsConn::getSizeForUrl(const std::string &uri)
     if (m_curl)
     {
         size_t downloadFileLength = 0;
-        curl_easy_setopt(m_curl, CURLOPT_URL, uri);
+        curl_easy_setopt(m_curl, CURLOPT_URL, uri.c_str());
         curl_easy_setopt(m_curl, CURLOPT_CUSTOMREQUEST, "GET");
         curl_easy_setopt(m_curl, CURLOPT_NOBODY, 1);
+#ifdef CURL_DEBUG
+        curl_easy_setopt(m_curl, CURLOPT_VERBOSE, 1L);
+        curl_easy_setopt(m_curl, CURLOPT_NOPROGRESS, 1L);
+#endif
         if (curl_easy_perform(m_curl) == CURLE_OK)
         {
             curl_easy_getinfo(m_curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &downloadFileLength);
@@ -93,12 +97,9 @@ int HttpsConn::Execute(void *arg)
 {
     DownMsg *downMsg = static_cast<DownMsg *>(arg);
     char *getbuf = downMsg->buf;
-    struct memory mem;
-    mem.response = getbuf;
-    mem.size = 2*1024*1024;
     CURLcode res;
     char range[256] = {0};
-    sprintf(range, "%ld-%ld", downMsg->offset, downMsg->offset+downMsg->size);
+    sprintf(range, "%ld-%ld", downMsg->offset, downMsg->offset + downMsg->size);
     if (m_curl)
     {
         curl_easy_setopt(m_curl, CURLOPT_URL, downMsg->uri.c_str());
@@ -106,15 +107,17 @@ int HttpsConn::Execute(void *arg)
         curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, write_data2);
         logDebug("transfer uri:%s, range:%s", downMsg->uri, range);
         if (getbuf)
-            curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &mem);
+            curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, getbuf);
         res = curl_easy_perform(m_curl);
-        if(res != CURLE_OK)
+        if (res != CURLE_OK)
         {
             logError("curl_easy_perform() failed: %s", curl_easy_strerror(res));
             return -1;
         }
         return 0;
-    } else {
+    }
+    else
+    {
         logError("m_curl is null");
         return -1;
     }

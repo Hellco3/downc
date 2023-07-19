@@ -18,7 +18,6 @@ public:
     void Init();
     int Execute(void * arg);
 protected:
-    static size_t redirect_callback(char* buffer, size_t size, size_t nitems, void* userdata);
     CURL*  m_curl;
 };
 

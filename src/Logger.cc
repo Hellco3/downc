@@ -15,7 +15,7 @@ using std::endl;
 Mylogger * Mylogger::_pInstance = nullptr;
  
 Mylogger::Mylogger()
-: _mycat(Category::getRoot().getInstance("mycat"))
+: _mycat(Category::getRoot().getInstance("downc"))
 {
 	auto ptnLayout1 = new PatternLayout();
 	ptnLayout1->setConversionPattern("%d %c [%p] %m%n");

@@ -30,6 +30,7 @@
 #include "Logger.h"
 #include "ThreadPool.h"
 #include "ProcessBar.h"
+#include "OptionHandler.h"
 #include "DownloadHandler.h"
 
 #define BUF_SIZE 2*1024*1024
@@ -71,7 +72,7 @@ protected:
 
     void removeFileFd(const std::string & filename);
 
-    int DownloadForUrl(std::string& uri);
+    int DownloadForUrl(std::string uri);
 
     void DownloadTask(std::string& uri, size_t offset, size_t size, size_t file_size);
 
@@ -79,7 +80,6 @@ protected:
 
     void pop_outstr(ostream & os);
 private:
-    unsigned long getCurMicSec();
     void mhelp(const char *project_name);
 private:
     MutexLock m_lock;
@@ -95,7 +95,7 @@ private:
 
     std::map<std::string, FileOp> _file_map;
 
-    std::vector<char*> _buflist;
+    std::vector<char*> _BufList;
     vector<std::string> _uris;
     bool _isExit = false;
 };

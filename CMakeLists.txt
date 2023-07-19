@@ -13,7 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 aux_source_directory(src TOOLSRC)
-aux_source_directory(3rdparty/mxml MXMLSRC)
+aux_source_directory(3rdparty/mxml/src MXMLSRC)
 aux_source_directory(src/filecompare FSRC_LIST)
 
 set(
@@ -39,6 +39,6 @@ target_link_directories(downc PUBLIC ${LIB_DIR})
 target_link_libraries(downc PUBLIC
                       pthread
                       log4cpp
-                      lcurl
+                      curl
                       )
 target_include_directories(downc PUBLIC ${INC_DIR})

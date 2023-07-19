@@ -42,12 +42,16 @@ std::shared_ptr<Conn> DownloadHandler::getConn(const std::string & protocol)
 
 size_t DownloadHandler::getFileSize(const std::string & uri)
 {
-    size_t downloadFileLength = 0;   
+    UriStruct uStruct;
+    getUriStruct(uri, uStruct);
+    std::shared_ptr<Conn> pConn = getConn(uStruct.protocol);
+    return pConn->getSizeForUrl(uri);
 }
 
 int DownloadHandler::getFinalUrl(std::string & url)
 {
-    UriStruct uStruct = getUriStruct(url);
+    UriStruct uStruct;
+    getUriStruct(url, uStruct);
     std::shared_ptr<Conn> pConn = getConn(uStruct.protocol);
     return pConn->getFinalUrl(url);
 }
@@ -59,7 +63,8 @@ int DownloadHandler::getData(const std::string &uri, char* buf,size_t offset, si
     dMsg.offset = offset;
     dMsg.size = size;
     dMsg.buf = buf;
-    UriStruct uStruct = getUriStruct(uri);
+    UriStruct uStruct;
+    getUriStruct(uri, uStruct);
     return _conn_map[uStruct.protocol]->Execute(&dMsg);
 }
 

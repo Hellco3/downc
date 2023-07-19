@@ -1,4 +1,5 @@
 #include "Uri.h"
+#include "Logger.h"
 
 UriStruct::UriStruct() : port(0), hasPassword(false), ipv6LiteralAddress(false)
 {
@@ -44,7 +45,7 @@ void UriStruct::swap(UriStruct &other)
     }
 }
 
-static std::string printSubstring(const std::string& str, int offset, int length) {
+static std::string divideSubstring(const std::string& str, int offset, int length) {
     std::string retstr="";
     int strLength = str.length();
     int end = offset + length;
@@ -56,20 +57,19 @@ static std::string printSubstring(const std::string& str, int offset, int length
     for (int i = offset; i < end; i++) {
         retstr += str[i];
     }
+    retstr+='\0';
     return retstr;
 }
-struct UriStruct getUriStruct(const std::string& uri)
+int getUriStruct(const std::string& uri, UriStruct &uri_s)
 {
-    struct UriStruct uri_s;
     std::string tmpstr;
-    int ret = 0;
     uri_split_result res;
-    ret = uri_split(&res,uri.c_str());
+    int ret = uri_split(&res,uri.c_str());
     for(int i=0; i<10; i++)
     {
         if(res.field_set & (1 << i))
         {
-            tmpstr = printSubstring(uri, res.fields[i].off, res.fields[i].len);
+            tmpstr = divideSubstring(uri, res.fields[i].off, res.fields[i].len);
             switch(i) {
                 case USR_SCHEME:
                 {
@@ -117,5 +117,5 @@ struct UriStruct getUriStruct(const std::string& uri)
     }
     if(1 & res.flags)
         uri_s.ipv6LiteralAddress = true;
-    return uri_s;
+    return ret;
 }

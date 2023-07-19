@@ -27,7 +27,8 @@ Client_Tool::Client_Tool(int argc, char** argv, int threadNum, int queSize)
         for(int idx=0; idx<threadNum; idx++)
         {
             _dhandlerlist.push_back(std::shared_ptr<DownloadHandler>(new DownloadHandler));
-            _buflist[idx] = new char[BUF_SIZE];
+            char* ptr = new char[BUF_SIZE];
+            _BufList.push_back(ptr);
         }
         _meta_handler.reset(new DownloadHandler);
     }
@@ -35,9 +36,9 @@ Client_Tool::Client_Tool(int argc, char** argv, int threadNum, int queSize)
 
 Client_Tool::~Client_Tool()
 {
-    for(auto iter : _buflist)
+    for(auto iter : _BufList)
     {
-        delete iter;
+        delete []iter;
     }
     _clientpool.stop();
     curl_global_cleanup();
@@ -117,6 +118,7 @@ int Client_Tool::start()
 
         for(auto &uiter : _uris)
         {
+            logDebug("downloadForUrl url:%s", uiter.c_str());
             if(0 != DownloadForUrl(uiter))
             {
                 logError("Download url:%s error", uiter.c_str());
@@ -169,15 +171,21 @@ void Client_Tool::removeFileFd(const std::string & filename)
     }
 }
 
-int Client_Tool::DownloadForUrl(std::string & uri)
+int Client_Tool::DownloadForUrl(std::string uri)
 {
-    _meta_handler->getFinalUrl(uri);
     size_t file_size = _meta_handler->getFileSize(uri);
-    UriStruct uStruct = getUriStruct(uri);
+    if(-1 == (int)file_size)
+    {
+        logError("getFileSize failed! uri:%s", uri.c_str());
+        return -1;
+    }
+    logDebug("file_size: %lu", file_size);
+    UriStruct uStruct;
+    getUriStruct(uri,uStruct);
     struct FileOp fileop;
     std::string filepath = prefix+uStruct.file;
     int file_fd = getFileFd(filepath, &fileop);
-    if(file_fd == -1)
+    if(-1 == file_fd)
     {
         logError("getFileFd error!! filepath:%s", filepath.c_str());
         return -1;
@@ -192,6 +200,7 @@ int Client_Tool::DownloadForUrl(std::string & uri)
         _clientpool.addTask(std::bind(&Client_Tool::DownloadTask, this, uri, offset, nread, file_size));
         offset += nread;
     }
+    return 0;
 }
 
 void Client_Tool::add_to_output(const string& str)
@@ -215,13 +224,14 @@ void Client_Tool::mhelp(const char *project_name)
 
 void Client_Tool::DownloadTask(std::string & uri, size_t offset, size_t size, size_t file_size)
 {
-    logDebug("uri:%s offset:%ld size:%ld file_size:%ld", uri.c_str(), offset, size, file_size);
-    UriStruct uStruct = getUriStruct(uri);
+    logDebug("uri:%s offset:%ld size:%ld file_size:%lu", uri.c_str(), offset, size, file_size);
+    UriStruct uStruct;
+    getUriStruct(uri, uStruct);
     std::string filepath = prefix+uStruct.file;
 
     FileOp fileop;
     int file_fd = getFileFd(filepath, &fileop);
-    char * getbuf = _buflist[handlerid];
+    char * getbuf = _BufList[handlerid];
     bzero(getbuf, BUF_SIZE);
     std::shared_ptr<DownloadHandler>pHandler = _dhandlerlist[handlerid];
     int ret = pHandler->getData(uri, getbuf, offset, size);
@@ -245,9 +255,3 @@ void Client_Tool::DownloadTask(std::string & uri, size_t offset, size_t size, si
     }
 }
     
-unsigned long Client_Tool::getCurMicSec()
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec * 1000000 + tv.tv_usec;
-}
