@@ -78,17 +78,20 @@ private:
 private:
     MutexLock m_lock;
     MutexLock file_lock;
+    // 线程池
     ThreadPool _clientpool;
     
     std::string out_str;
     std::string prefix="";
+    // 用于元数据获取的句柄
     std::unique_ptr<DownloadHandler> _meta_handler;
 
-    // 选项操作票类列表
+    // 选项操作类列表
     vector<std::shared_ptr<OptionHandler>> _ohandlerlist;
     // 下载操作类列表
     vector<std::shared_ptr<DownloadHandler>> _dhandlerlist;
 
+    // 文件名与文件操作句柄的映射表
     std::map<std::string, FileOp> _file_map;
 
     std::vector<char*> _BufList;
