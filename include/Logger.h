@@ -4,6 +4,7 @@
 #include <log4cpp/Category.hh>
 using namespace log4cpp;
 
+// 一个基于log4cpp封装的日志类
 class Mylogger
 {
 public:

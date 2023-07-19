@@ -5,6 +5,7 @@
 #include "OptionHandler.h"
 #include "Logger.h"
 
+// 日志文件路径设置选项类
 class LogFileOptionHandler
 : public OptionHandler
 {

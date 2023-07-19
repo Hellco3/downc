@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include "Eventfd.h"
 
+// 一个封装好的进度条类
 class ProcessBar
 {
 public:

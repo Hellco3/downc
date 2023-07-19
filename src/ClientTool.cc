@@ -12,7 +12,6 @@
 #define OPTSTRING ":l:hL:p:"
 
 __thread int handlerid = 0;
-const char *tmppath = "../data/source.tmp"; // 保存更新数据的文件路径
 Client_Tool * g_tool;
 
 Client_Tool::Client_Tool(int argc, char** argv, int threadNum, int queSize)
@@ -172,6 +171,7 @@ void Client_Tool::removeFileFd(const std::string & filename)
     }
 }
 
+// 先通过获取报文头来获取文件的大小，在将文件按2M为单位进行分发，文件小于2M的会由单线程完成下载，大于2M的以2M为单位给各线程分发任务
 int Client_Tool::DownloadForUrl(std::string uri)
 {
     size_t file_size = _meta_handler->getFileSize(uri);
@@ -219,10 +219,15 @@ void Client_Tool::mhelp(const char *project_name)
 {
     printf("-------------------------------------\n");
     printf("please in put param for example: \n");
-    printf("demo: ./%s https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ls-lR.gz", project_name);
+    printf("demo:\n");
+    printf("./%s https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ls-lR.gz", project_name);
+    printf("./%s --log <logfile> 设置日志文件保存位置", project_name);
+    printf("./%s --console-log-level <log-level> 设置日志登记:error/warn/info/debug", project_name);
+    printf("./%s --prefix <filepath> 设置文件保存路径", project_name);
     printf("--------------------------------------\n");
 }
 
+// 分发给线程池的单个下载任务函数
 void Client_Tool::DownloadTask(std::string & uri, size_t offset, size_t size, size_t file_size)
 {
     logDebug("uri:%s offset:%ld size:%ld file_size:%lu", uri.c_str(), offset, size, file_size);

@@ -49,23 +49,17 @@ class Client_Tool
 public:
     /**
      * @brief Client_Tool的构造函数
-     * @param poolname 存储池的名字
-     * @param object_id 文件id
-     * @param bRandom 是否开启随机写
     */
     Client_Tool(int argc, char ** argv, int threadNum=10, int queSize=20);
     ~Client_Tool();
     
+    // 命令行解析函数
     int OptionProcess(std::vector<std::string>& uris, int argc, char** argv);
     
     int start();
 
+    // 设置文件保存路径
     void setPrefix(const string & pre);
-    /**
-     * @brief 单次下载任务
-     * @param object_id 文件id
-     * @param bRandom 是否开启随机读 
-    */
 
 protected:
     int getFileFd(const std::string & filename, FileOp* fileop=NULL);
@@ -90,7 +84,9 @@ private:
     std::string prefix="";
     std::unique_ptr<DownloadHandler> _meta_handler;
 
+    // 选项操作票类列表
     vector<std::shared_ptr<OptionHandler>> _ohandlerlist;
+    // 下载操作类列表
     vector<std::shared_ptr<DownloadHandler>> _dhandlerlist;
 
     std::map<std::string, FileOp> _file_map;

@@ -7,6 +7,7 @@
 
 #include "Conn.h"
 
+//Http连接类
 class HttpConn
 : public Conn
 {

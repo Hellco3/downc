@@ -56,6 +56,7 @@ int DownloadHandler::getFinalUrl(std::string & url)
     return pConn->getFinalUrl(url);
 }
 
+// 解析URL，不同的协议的链接会分配给不同的协议连接类进行远程数据获取，最终数据会写入到buf内存缓冲区中
 int DownloadHandler::getData(const std::string &uri, char* buf,size_t offset, size_t size)
 {
     DownMsg dMsg;

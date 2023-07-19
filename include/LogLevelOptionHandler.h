@@ -3,6 +3,7 @@
 #include "OptionHandler.h"
 #include <string>
 
+// 日志记录等级设置选项类
 class LogLevelOptionHandler
 : public OptionHandler
 {

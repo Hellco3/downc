@@ -21,6 +21,7 @@ struct DownMsg
     char * buf;
 };
 
+//连接的抽象基类
 class Conn{
 public:
     Conn()=default;
