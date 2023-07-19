@@ -9,18 +9,18 @@
 #   $ make           Compile and link (or archive)
 #   $ make clean     Clean the objectives and target.
 ###############################################################################
-export BUILD_HOME=$(dir $(CURDIR)/)
+export BUILD_HOME := $(shell pwd)
 
 CROSS_COMPILE =
 OPTIMIZE := -O0
 WARNINGS := -Wall 
-DEFS     := 
 EXTRA_CFLAGS := -g -std=c++0x
-LIBS := -lpthread -lcurl -llog4cpp
+DEFS     := -DCOMPILE_FOR_DOWNC
+LIBS := -lpthread -llog4cpp -lcurl
 
-INC_DIR   = $(BUILD_HOME)/include $(BUILD_HOME)/3rdparty/mxml/include
-SRC_DIR   = $(BUILD_HOME)/src $(BUILD_HOME)/3rdparty/mxml/src
-OBJ_DIR   = ./obj
+INC_DIR   = $(BUILD_HOME)/include
+SRC_DIR   = $(BUILD_HOME)/src 
+OBJ_DIR   = $(BUILD_HOME)/obj
 EXTRA_SRC = 
 EXCLUDE_FILES = 
 
@@ -65,8 +65,11 @@ inc_dir = $(foreach d,$(sort $(INC_DIR) $(SRC_DIR)),-I$d)
 
 #--# Do smart deduction automatically
 $(eval $(foreach i,$(SUFFIX),$(call set_src_x,$i,$(SRC_DIR),$(EXTRA_SRC),$(EXCLUDE_FILES))))
+
 $(eval $(foreach i,$(SUFFIX),$(call set_obj_x,$i,$(src-$i),$(prefix_objdir))))
+
 $(eval $(foreach f,$(EXTRA_SRC),$(call add_newline,vpath $(notdir $f) $(dir $f))))
+
 $(eval $(foreach d,$(SRC_DIR),$(foreach i,$(SUFFIX),$(call add_newline,vpath %.$i $d))))
 
 all_objs = $(foreach i,$(SUFFIX),$(obj-$i))
@@ -81,10 +84,10 @@ $(error Unexpected TARGET_TYPE `$(TARGET_TYPE)')
 endif
 
 ifeq ($(TARGET_TYPE),so)
- CFLAGS  += -fpic -shared
- LDFLAGS += -shared
+	CFLAGS  += -fpic -shared
+	LDFLAGS += -shared
 else
- LDFLAGS += -g
+	LDFLAGS += -g
 endif
 
 PHONY = all .mkdir clean
@@ -123,4 +126,3 @@ clean:
 -include $(patsubst %.o,%.o.d,$(all_objs))
 
 .PHONY: $(PHONY)
-

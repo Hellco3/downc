@@ -4,7 +4,6 @@
 #include "LogFileOptionHandler.h"
 #include "LogLevelOptionHandler.h"
 #include "PrefixOptionHandler.h"
-#include "uri_split.h"
 #include "Uri.h"
 #include "ProtocolDetector.h"
 
@@ -220,10 +219,10 @@ void Client_Tool::mhelp(const char *project_name)
     printf("-------------------------------------\n");
     printf("please in put param for example: \n");
     printf("demo:\n");
-    printf("./%s https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ls-lR.gz", project_name);
-    printf("./%s --log <logfile> 设置日志文件保存位置", project_name);
-    printf("./%s --console-log-level <log-level> 设置日志登记:error/warn/info/debug", project_name);
-    printf("./%s --prefix <filepath> 设置文件保存路径", project_name);
+    printf("%s https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ls-lR.gz\n", project_name);
+    printf("%s --log <logfile> 设置日志文件保存位置\n", project_name);
+    printf("%s --console-log-level <log-level> 设置日志等级:error/warn/info/debug\n", project_name);
+    printf("%s --prefix <filepath> 设置文件保存路径\n", project_name);
     printf("--------------------------------------\n");
 }
 

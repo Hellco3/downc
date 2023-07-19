@@ -2,7 +2,7 @@
 
 #include <cstring>
 #include <iomanip>
-#include "uri_split.h"
+#include "UriSplit.h"
 
 ProtocolDetector::ProtocolDetector() = default;
 

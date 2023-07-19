@@ -1,7 +1,7 @@
 #ifndef _D_URI_H
 #define _D_URI_H
 #include <string>
-#include "uri_split.h"
+#include "UriSplit.h"
 
 struct UriStruct
 {

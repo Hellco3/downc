@@ -32,7 +32,7 @@
  * files in the program, then also delete it here.
  */
 /* copyright --> */
-#include "uri_split.h"
+#include "UriSplit.h"
 
 #include <stdlib.h>
 
