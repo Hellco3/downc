@@ -93,7 +93,7 @@ int HttpConn::Execute(void *arg)
     char *getbuf = downMsg->buf;
     CURLcode res;
     char range[256] = {0};
-    sprintf(range, "%ld-%ld", downMsg->offset, downMsg->offset + downMsg->size);
+    sprintf(range, "%lu-%lu", downMsg->offset, downMsg->offset + downMsg->size);
     if (m_curl)
     {
         curl_easy_setopt(m_curl, CURLOPT_URL, downMsg->uri.c_str());
