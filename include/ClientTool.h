@@ -66,13 +66,14 @@ protected:
 
     void removeFileFd(const std::string & filename);
 
-    int DownloadForUrl(std::string uri);
+    int downloadForUrl(std::string uri);
 
-    void DownloadTask(std::string& uri, size_t offset, size_t size, size_t file_size);
+    void downloadTask(std::string& uri, size_t offset, size_t size, size_t file_size);
 
-    void add_to_output(const string& str);
+    void addToOutput(const string& str);
 
-    void pop_outstr(ostream & os);
+    void popOutput(ostream & os);
+
 private:
     void mhelp(const char *project_name);
 private:
@@ -99,6 +100,6 @@ private:
     bool _isExit = false;
 };
 
-uint64_t get_file_size(const string & filepath);
+uint64_t getFileSize(const string & filepath);
 
 #endif
