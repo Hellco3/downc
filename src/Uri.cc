@@ -45,77 +45,81 @@ void UriStruct::swap(UriStruct &other)
     }
 }
 
-static std::string divideSubstring(const std::string& str, int offset, int length) {
-    std::string retstr="";
+static std::string divideSubstring(const std::string &str, int offset, int length)
+{
+    std::string retstr = "";
     int strLength = str.length();
     int end = offset + length;
 
-    if (offset < 0 || offset >= strLength || end > strLength) {
+    if (offset < 0 || offset >= strLength || end > strLength)
+    {
         return "";
     }
 
-    for (int i = offset; i < end; i++) {
+    for (int i = offset; i < end; i++)
+    {
         retstr += str[i];
     }
-    retstr+='\0';
+    retstr += '\0';
     return retstr;
 }
-int getUriStruct(const std::string& uri, UriStruct &uri_s)
+int getUriStruct(const std::string &uri, UriStruct &uri_s)
 {
     std::string tmpstr;
     uri_split_result res;
-    int ret = uri_split(&res,uri.c_str());
-    for(int i=0; i<10; i++)
+    int ret = uri_split(&res, uri.c_str());
+    for (int i = 0; i < 10; i++)
     {
-        if(res.field_set & (1 << i))
+        if (res.field_set & (1 << i))
         {
             tmpstr = divideSubstring(uri, res.fields[i].off, res.fields[i].len);
-            switch(i) {
-                case USR_SCHEME:
-                {
-                    uri_s.protocol = tmpstr;
-                    break;
-                }
-                case USR_HOST:
-                {
-                    uri_s.host = tmpstr;
-                    break;
-                }
-                case USR_PORT:
-                {
-                    uri_s.port = res.port;
-                    break;
-                }
-                case USR_PATH:
-                {   
-                    uri_s.dir = tmpstr;
-                    break;
-                }
-                case USR_QUERY:
-                {
-                    uri_s.query = tmpstr;
-                    break;
-                }
-                case USR_USER:
-                {
-                    uri_s.username = tmpstr;
-                    break;
-                }
-                case USR_PASSWD:
-                {
-                    uri_s.hasPassword = true;
-                    uri_s.password = tmpstr; 
-                    break;
-                } 
-                case USR_BASENAME:
-                {
-                    uri_s.file = tmpstr;
-                    break;
-                }
+            switch (i)
+            {
+            case USR_SCHEME:
+            {
+                uri_s.protocol = tmpstr;
+                break;
+            }
+            case USR_HOST:
+            {
+                uri_s.host = tmpstr;
+                break;
+            }
+            case USR_PORT:
+            {
+                uri_s.port = res.port;
+                break;
+            }
+            case USR_PATH:
+            {
+                uri_s.dir = tmpstr;
+                break;
+            }
+            case USR_QUERY:
+            {
+                uri_s.query = tmpstr;
+                break;
+            }
+            case USR_USER:
+            {
+                uri_s.username = tmpstr;
+                break;
+            }
+            case USR_PASSWD:
+            {
+                uri_s.hasPassword = true;
+                uri_s.password = tmpstr;
+                break;
+            }
+            case USR_BASENAME:
+            {
+                uri_s.file = tmpstr;
+                break;
+            }
             }
         }
     }
-    if(1 & res.flags)
+    if (1 & res.flags)
         uri_s.ipv6LiteralAddress = true;
     return ret;
 }

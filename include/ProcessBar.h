@@ -11,17 +11,18 @@ class ProcessBar
 {
 public:
     ProcessBar();
-    void start(uint64_t size, const std::string & file_name);
+    void start(uint64_t size, const std::string &file_name);
     void add(uint64_t num);
     void stop();
-    static void * thread_func(void *data);
+    static void *thread_func(void *data);
     ~ProcessBar();
+
 private:
     pthread_t pid;
     uint64_t done_size;
     uint64_t total_size;
     Eventfd evtfd;
-    std::string _file_name;    
+    std::string _file_name;
     bool running;
 };
 

@@ -8,7 +8,7 @@ HttpsConn::HttpsConn()
     {
         logError("curl init failed!");
     }
-    Init();
+    init();
 }
 
 HttpsConn::~HttpsConn()
@@ -16,7 +16,7 @@ HttpsConn::~HttpsConn()
     curl_easy_cleanup(m_curl);
 }
 
-void HttpsConn::Init()
+void HttpsConn::init()
 {
     curl_easy_setopt(m_curl, CURLOPT_FOLLOWLOCATION, 1L); // 启用重定向跟随
     // 对于HTTPS，需要设置以下选项以启用SSL/TLS支持
@@ -46,7 +46,7 @@ size_t HttpsConn::getSizeForUrl(const std::string &uri)
         }
         curl_easy_reset(m_curl);
 
-        Init();
+        init();
         return downloadFileLength;
     }
     else
@@ -64,7 +64,7 @@ int HttpsConn::getFinalUrl(std::string &uri)
 
         curl_easy_setopt(m_curl, CURLOPT_URL, uri.c_str());
         curl_easy_setopt(m_curl, CURLOPT_FOLLOWLOCATION, 1L); // 启用重定向跟随
-        curl_easy_setopt(m_curl, CURLOPT_HEADERFUNCTION, redirect_callback);
+        curl_easy_setopt(m_curl, CURLOPT_HEADERFUNCTION, redirectCallback);
         curl_easy_setopt(m_curl, CURLOPT_HEADERDATA, redirectURL);
         curl_easy_setopt(m_curl, CURLOPT_NOBODY, 1);
 
@@ -84,7 +84,7 @@ int HttpsConn::getFinalUrl(std::string &uri)
             curl_easy_reset(m_curl);
             return -1;
         }
-        Init();
+        init();
     }
     else
     {
@@ -93,7 +93,7 @@ int HttpsConn::getFinalUrl(std::string &uri)
     }
 }
 
-int HttpsConn::Execute(void *arg)
+int HttpsConn::execute(void *arg)
 {
     DownMsg *downMsg = static_cast<DownMsg *>(arg);
     char *getbuf = downMsg->buf;
@@ -104,7 +104,7 @@ int HttpsConn::Execute(void *arg)
     {
         curl_easy_setopt(m_curl, CURLOPT_URL, downMsg->uri.c_str());
         curl_easy_setopt(m_curl, CURLOPT_RANGE, range);
-        curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, write_data2);
+        curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, writeData);
         logDebug("transfer uri:%s, range:%s", downMsg->uri, range);
         if (getbuf)
             curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, getbuf);

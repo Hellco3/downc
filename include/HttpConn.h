@@ -16,8 +16,8 @@ public:
     ~HttpConn();
     size_t getSizeForUrl(const std::string & uri);
     int getFinalUrl(std::string &uri);
-    void Init();
-    int Execute(void * arg);
+    void init();
+    int execute(void * arg);
 protected:
     CURL*  m_curl;
 };

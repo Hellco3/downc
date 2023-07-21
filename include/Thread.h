@@ -3,11 +3,10 @@
 
 #include <pthread.h>
 #include <functional>
-using std::function;
 using std::bind;
+using std::function;
 
 using ThreadCallback = function<void()>;
-
 
 class Thread
 {
@@ -18,13 +17,13 @@ public:
     void join();
 
 private:
-    //线程入口函数
+    // 线程入口函数
     static void *threadFunc(void *arg);
 
 private:
     pthread_t _thid;
     bool _isRunning;
-    //要去实现的任务
+    // 要去实现的任务
     ThreadCallback _cb;
     int _thread_id;
 };

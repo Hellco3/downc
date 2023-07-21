@@ -1,16 +1,13 @@
 #include "TaskQueue.h"
 
 TaskQueue::TaskQueue(size_t queSize)
-: _queSize(queSize)
-, _que()
-, _mutex()
-, _notEmpty(_mutex)
-, _notFull(_mutex)
-, _flag(true)
-{}
+    : _queSize(queSize), _que(), _mutex(), _notEmpty(_mutex), _notFull(_mutex), _flag(true)
+{
+}
 
 TaskQueue::~TaskQueue()
-{}
+{
+}
 
 bool TaskQueue::empty() const
 {
@@ -22,15 +19,15 @@ bool TaskQueue::full() const
     return _queSize == _que.size();
 }
 
-void TaskQueue::push(Elem && value)
+void TaskQueue::push(Elem &&value)
 {
     {
-    MutexLockGuard autoLock(_mutex);
-    while(full())
-    {
-        _notFull.wait();
-    }
-    _que.push(value);
+        MutexLockGuard autoLock(_mutex);
+        while (full())
+        {
+            _notFull.wait();
+        }
+        _que.push(value);
     }
     _notEmpty.notify();
 }
@@ -39,21 +36,24 @@ Elem TaskQueue::pop()
 {
     Elem tmp;
     MutexLockGuard autoLock(_mutex);
-    while(_flag && empty())
+    while (_flag && empty())
     {
         _notEmpty.wait();
     }
-    if(_flag) {
+    if (_flag)
+    {
         tmp = _que.front();
         _que.pop();
         _notFull.notify();
 
         return tmp;
-    } else {
+    }
+    else
+    {
         return nullptr;
     }
 }
-    
+
 void TaskQueue::setargs(size_t queSize)
 {
     _queSize = queSize;

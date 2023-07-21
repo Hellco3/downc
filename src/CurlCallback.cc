@@ -4,18 +4,17 @@
 #include "CurlCallback.h"
 #include "Logger.h"
 
-
-size_t redirect_callback(char *buffer, size_t size, size_t nitems, void *userdata)
+size_t redirectCallback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
     // 将目标URL存储在userdata中
     memcpy(userdata, buffer, nitems * size);
     return nitems * size;
 }
 
-size_t write_data2(void *data, size_t size, size_t nmemb, void *userp)
+size_t writeData(void *data, size_t size, size_t nmemb, void *userp)
 {
-    size_t realsize = size * nmemb;              // 本次响应数据的实际大小
-    char *mem = (char *)userp; // 获取用户传进的变量
+    size_t realsize = size * nmemb; // 本次响应数据的实际大小
+    char *mem = (char *)userp;      // 获取用户传进的变量
 
     memcpy(mem, data, realsize);
 

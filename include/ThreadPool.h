@@ -7,8 +7,8 @@
 #include <vector>
 #include <memory>
 
-using std::vector;
 using std::unique_ptr;
+using std::vector;
 
 // 一个封装好的线程池
 class ThreadPool
@@ -33,7 +33,7 @@ private:
     void threadFunc();
 
 private:
-    size_t  _threadNum;
+    size_t _threadNum;
     size_t _queSize;
     vector<unique_ptr<Thread>> _threads;
     TaskQueue _taskQue;

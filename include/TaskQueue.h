@@ -21,7 +21,7 @@ public:
     Elem pop();
 
     void setargs(size_t queSize);
-    //将所有的等在_notEmpty上的线程唤醒
+    // 将所有的等在_notEmpty上的线程唤醒
     void wakeup();
 
 private:

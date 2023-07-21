@@ -2,7 +2,7 @@
 #include "MutexLock.h"
 
 Condition::Condition(MutexLock &mutex)
-: _mutex(mutex)
+    : _mutex(mutex)
 {
     pthread_cond_init(&_cond, nullptr);
 }
@@ -14,7 +14,7 @@ Condition::~Condition()
 
 void Condition::wait()
 {
-    pthread_cond_wait(&_cond, _mutex.getMutexLockPtr());//_mutex
+    pthread_cond_wait(&_cond, _mutex.getMutexLockPtr()); //_mutex
 }
 
 void Condition::notify()
@@ -26,5 +26,3 @@ void Condition::notifyAll()
 {
     pthread_cond_broadcast(&_cond);
 }
-
-

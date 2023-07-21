@@ -8,11 +8,11 @@ ProcessBar::ProcessBar()
 
 ProcessBar::~ProcessBar()
 {
-    if(running)
+    if (running)
         pthread_join(pid, nullptr);
 }
 
-void ProcessBar::start(uint64_t size, const std::string & file_name)
+void ProcessBar::start(uint64_t size, const std::string &file_name)
 {
     total_size = size;
     running = true;
@@ -50,17 +50,17 @@ void *ProcessBar::thread_func(void *data)
             {
                 uint64_t val = instance->evtfd.Read();
                 buflen += val;
-                if(buflen >= slice || instance->total_size - instance->done_size == buflen)
+                if (buflen >= slice || instance->total_size - instance->done_size == buflen)
                 {
                     instance->done_size += buflen;
-                    if(instance->done_size > instance->total_size)
+                    if (instance->done_size > instance->total_size)
                     {
                         instance->done_size = instance->total_size;
                     }
-                    double percents = 100 * (double)instance->done_size/instance->total_size;
-                    printf("\r%s[%.2lf%%]", instance->_file_name.c_str(),percents);
+                    double percents = 100 * (double)instance->done_size / instance->total_size;
+                    printf("\r%s[%.2lf%%]", instance->_file_name.c_str(), percents);
                     // std::cout << "\r"
-                    //           << "[" << std::fixed << std::setprecision(2) 
+                    //           << "[" << std::fixed << std::setprecision(2)
                     //           << percents << "\%"
                     //           << "]" << std::flush; // 在这一行的首位置打印出进度条百分比
                     for (int j = 1; j <= percents; j++)

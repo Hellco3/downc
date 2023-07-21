@@ -15,7 +15,7 @@ HttpConn::~HttpConn()
     curl_easy_cleanup(m_curl);
 }
 
-void HttpConn::Init()
+void HttpConn::init()
 {
     curl_easy_setopt(m_curl, CURLOPT_FOLLOWLOCATION, 1L); // 启用重定向跟随
 }
@@ -41,7 +41,7 @@ size_t HttpConn::getSizeForUrl(const std::string &uri)
             downloadFileLength = -1;
         }
         curl_easy_reset(m_curl);
-        Init();
+        init();
         return downloadFileLength;
     }
     else
@@ -59,7 +59,7 @@ int HttpConn::getFinalUrl(std::string &uri)
 
         curl_easy_setopt(m_curl, CURLOPT_URL, uri.c_str());
         curl_easy_setopt(m_curl, CURLOPT_FOLLOWLOCATION, 1L); // 启用重定向跟随
-        curl_easy_setopt(m_curl, CURLOPT_HEADERFUNCTION, redirect_callback);
+        curl_easy_setopt(m_curl, CURLOPT_HEADERFUNCTION, redirectCallback);
         curl_easy_setopt(m_curl, CURLOPT_HEADERDATA, redirectURL);
         curl_easy_setopt(m_curl, CURLOPT_NOBODY, 1);
 
@@ -87,7 +87,7 @@ int HttpConn::getFinalUrl(std::string &uri)
     }
 }
 
-int HttpConn::Execute(void *arg)
+int HttpConn::execute(void *arg)
 {
     DownMsg *downMsg = static_cast<DownMsg *>(arg);
     char *getbuf = downMsg->buf;
@@ -98,7 +98,7 @@ int HttpConn::Execute(void *arg)
     {
         curl_easy_setopt(m_curl, CURLOPT_URL, downMsg->uri.c_str());
         curl_easy_setopt(m_curl, CURLOPT_RANGE, range);
-        curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, write_data2);
+        curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, writeData);
         logDebug("transfer uri:%s, range:%s", downMsg->uri, range);
         if (getbuf)
             curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, getbuf);

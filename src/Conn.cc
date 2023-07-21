@@ -3,21 +3,22 @@
 
 #include "Conn.h"
 
-Protocol ProtocolToEnum(const std::string & protocol)
+Protocol ProtocolToEnum(const std::string &protocol)
 {
-    if(!strcasecmp(protocol.c_str(), "http"))
+    if (!strcasecmp(protocol.c_str(), "http"))
     {
         return HTTP;
-    } 
-    else if(!strcasecmp(protocol.c_str(), "https"))
+    }
+    else if (!strcasecmp(protocol.c_str(), "https"))
     {
         return HTTPS;
     }
-    else if(!strcasecmp(protocol.c_str(), "ftp"))
+    else if (!strcasecmp(protocol.c_str(), "ftp"))
     {
         return FTP;
-    } else 
+    }
+    else
     {
-        return PROTO_DEFAULT; 
+        return PROTO_DEFAULT;
     }
 }

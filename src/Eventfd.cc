@@ -1,6 +1,5 @@
 #include "Eventfd.h"
 
-
 Eventfd::Eventfd()
 {
     evtfd = eventfd(0, 0);

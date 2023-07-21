@@ -24,5 +24,5 @@ struct UriStruct
     void swap(UriStruct &other);
 };
 
-int getUriStruct(const std::string& uri, UriStruct & uri_s);
+int getUriStruct(const std::string &uri, UriStruct &uri_s);
 #endif
