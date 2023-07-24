@@ -5,11 +5,12 @@
 
 // 日志记录等级设置选项类
 class LogLevelOptionHandler
-: public OptionHandler
+    : public OptionHandler
 {
 public:
-    LogLevelOptionHandler(void * arg);
+    LogLevelOptionHandler(void *arg);
     void doHandle();
+
 private:
     std::string _level;
 };

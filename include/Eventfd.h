@@ -4,7 +4,7 @@
 #include <sys/eventfd.h>
 #include <unistd.h>
 
-class Eventfd 
+class Eventfd
 {
 public:
     Eventfd();
@@ -15,8 +15,9 @@ public:
     void Write(uint64_t value);
     uint64_t Read();
     ~Eventfd();
+
 private:
-    //std::mutex m_mtx;
+    // std::mutex m_mtx;
     int evtfd;
 };
 #endif

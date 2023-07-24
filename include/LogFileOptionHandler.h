@@ -7,13 +7,13 @@
 
 // 日志文件路径设置选项类
 class LogFileOptionHandler
-: public OptionHandler
+    : public OptionHandler
 {
 public:
-    LogFileOptionHandler(void * arg);
+    LogFileOptionHandler(void *arg);
     void doHandle();
+
 private:
-    std::string _logpath;    
+    std::string _logpath;
 };
 #endif
-

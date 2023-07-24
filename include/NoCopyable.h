@@ -6,12 +6,13 @@ class NoCopyable
 public:
 protected:
     NoCopyable()
-    {}
+    {
+    }
     ~NoCopyable()
-    {}
+    {
+    }
     NoCopyable(const NoCopyable &rhs) = delete;
     NoCopyable &operator=(const NoCopyable &rhs) = delete;
-
 };
 
 #endif

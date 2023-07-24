@@ -5,7 +5,7 @@
 #include <pthread.h>
 
 class MutexLock
-: NoCopyable
+    : NoCopyable
 {
 public:
     MutexLock();
@@ -13,21 +13,20 @@ public:
     void lock();
     void unlock();
 
-    pthread_mutex_t *getMutexLockPtr() 
+    pthread_mutex_t *getMutexLockPtr()
     {
         return &_mutex;
     }
 
 private:
     pthread_mutex_t _mutex;
-
 };
 
 class MutexLockGuard
 {
 public:
     MutexLockGuard(MutexLock &mutex)
-    : _mutex(mutex)
+        : _mutex(mutex)
     {
         _mutex.lock();
     }
@@ -36,6 +35,7 @@ public:
     {
         _mutex.unlock();
     }
+
 private:
     MutexLock &_mutex;
 };
